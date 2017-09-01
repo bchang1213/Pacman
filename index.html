@@ -5,51 +5,125 @@
 	<title>Pacman Exercise</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
-	<script type="text/javascript">
-		var world = [
-			[3,3,3,3,3,3,3,3,3,3,3,3,3],
-			[3,2,2,2,2,2,2,2,2,2,2,2,3],
-			[3,2,1,3,3,3,2,3,1,3,3,2,3],
-			[3,2,2,2,2,2,2,2,2,2,2,2,3],
-			[3,3,2,3,3,2,2,3,2,3,2,2,3],
-			[3,2,2,2,2,2,2,1,2,2,2,2,3],
-			[3,2,2,2,3,2,3,3,2,2,2,3,3],
-			[3,2,2,2,2,2,2,2,2,2,2,2,3],
-			[3,3,2,2,3,2,3,3,3,2,2,3,3],
-			[3,2,2,2,2,2,2,2,2,2,2,2,3],
-			[3,3,2,1,3,3,2,3,2,1,2,2,3],
-			[3,2,2,1,2,2,2,2,2,2,2,2,3],
-			[3,3,2,3,2,3,2,3,3,2,3,2,3],
-			[3,2,2,2,2,2,2,2,2,2,2,2,3],
-			[3,3,3,3,3,3,3,3,3,3,3,3,3]
-		];
-
-		function displayWorld(){
-			var output="";
-			for(var i=0; i<world.length;i++){
-				output += "\n<div class='row'>";
-				for(var j=0; j<world[i].length;j++){
-					if(world[i][j] == 3){
-						output+="\n\t<div class='brick'></div>";
-					};
-					if(world[i][j] == 2){
-						output+="\n\t<div class='coin'></div>";
-					};
-					if(world[i][j] == 1){
-						output+= "\n\t<div class='empty'></div>";
-					};
-				};
-				output += "\n</div>";
-			};
-			// console.log(output);
-			document.getElementById('world').innerHTML = output;
-		};
-
-		displayWorld();
-	</script>
 </head>
 <body>
-<div id="world"></div>
+	<div id="container">
+		<div id="world"></div>
+		<div id="pacman"></div>
+		<div id="score">0</div>
+	</div>
+	<script type="text/javascript">
+	var world = [
+		[3,3,3,3,3,3,3,3,3,3,3,3,3],
+		[3,2,2,2,2,2,2,2,2,2,2,4,3],
+		[3,2,1,3,3,3,2,3,1,3,3,2,3],
+		[3,2,2,2,2,2,2,2,2,2,2,2,3],
+		[3,3,2,3,3,2,2,3,2,3,2,2,3],
+		[3,4,2,2,2,2,2,1,2,2,2,2,3],
+		[3,2,2,2,3,2,3,3,2,2,2,3,3],
+		[3,2,2,2,2,2,4,2,2,2,2,2,3],
+		[3,3,2,2,3,2,3,3,3,2,2,3,3],
+		[3,2,2,2,2,2,2,2,2,2,2,2,3],
+		[3,3,2,1,3,3,2,3,2,1,2,2,3],
+		[3,2,2,1,2,2,2,2,2,2,2,2,3],
+		[3,3,2,3,2,3,2,3,3,2,3,2,3],
+		[3,4,2,2,2,2,2,2,2,2,2,4,3],
+		[3,3,3,3,3,3,3,3,3,3,3,3,3]
+	];
 
+	//1 = empty
+	//2 = coin
+	//3 = block
+	//4 = cherries
+
+
+	var score = 0;
+
+	var pacman = {
+		x: 1,
+		y: 1
+	};
+
+	function displayWorld(){
+		var output="";
+		for(var i=0; i<world.length;i++){
+			output += "\n<div class='row'>\n";
+			for(var j=0; j<world[i].length;j++){
+				if(world[i][j] == 3){
+					output+="<div class='brick'></div>";
+				};
+				if(world[i][j] == 2){
+					output+="<div class='coin'></div>";
+				};
+				if(world[i][j] == 1){
+					output+= "<div class='empty'></div>";
+				};
+				if(world[i][j] == 4){
+					output+= "<div class='cherry'></div>";
+				};
+			};
+			output += "\n</div>";
+		};
+		// console.log(output);
+		document.getElementById('world').innerHTML = output;
+	};
+
+	function displayPacman(){
+		document.getElementById('pacman').style.top = pacman.y*20+"px";
+		document.getElementById('pacman').style.left = pacman.x*20+"px";
+	};
+
+	function displayScore(){
+		document.getElementById('score').innerHTML = score;
+
+	};
+
+	displayWorld();
+	displayPacman();
+	displayScore();
+
+	document.onkeydown = function(e){
+		//left
+		if(e.keyCode == 37 && world[pacman.y][pacman.x-1] != 3){
+			//when pacman looks left, performs a scale transformation along X axis.
+			document.getElementById('pacman').style.transform = "scaleX(-1)";
+			pacman.x--;
+		}
+		//right keydown
+		if(e.keyCode ==39 && world[pacman.y][pacman.x+1] != 3){
+			//when pacman looks right, performs a scale transformation along X axis.
+			document.getElementById('pacman').style.transform = "scaleX(1)";
+			pacman.x++;
+		}
+		//down keydown
+		if(e.keyCode ==40 && world[pacman.y+1][pacman.x] != 3){
+			//when pacman looks down, rotates pacman by 90 degrees.
+			document.getElementById('pacman').style.transform = "rotate(90deg)";
+			pacman.y++;
+		}
+		//up keydown
+		if(e.keyCode ==38 && world[pacman.y-1][pacman.x] != 3){
+			//when pacman looks down, rotates pacman by 90 degrees.
+			document.getElementById('pacman').style.transform = "rotate(-90deg)";
+			pacman.y--;
+		}
+		//if the number in the world array is 4(a cherry), add 50 points and then turn that space to a 1 (empty).
+		if(world[pacman.y][pacman.x] == 4){
+			world[pacman.y][pacman.x] = 1;
+			score+= 50;
+			displayWorld();
+			displayScore();
+		};
+		//eating the coin
+		if(world[pacman.y][pacman.x] == 2){
+			world[pacman.y][pacman.x] = 1;
+			score+= 10;
+			displayWorld();
+			displayScore();
+		}
+		// console.log(e.keyCode);
+		displayPacman();
+	}
+	</script>
 </body>
 </html>

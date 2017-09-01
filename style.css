@@ -6,6 +6,9 @@ body{
 	background-color: black;
 }
 
+div.row{
+	height:20px;
+}
 div.row div{
 	width: 20px;
 	height: 20px;
@@ -22,8 +25,30 @@ div.coin{
 	background-position: center;
 }
 
-div.pacman{
+div#pacman{
 	background: url('pacman.gif');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	width: 20px;
+	height: 20px;
+	position: absolute;
+}
+
+div#score{
+	border: 1px solid white;
+	width: 30px;
+	height: 20px;
+	color: white;
+	text-align: center;
+	padding: 7px;
+	position: absolute;
+	top: 10px;
+	left: 270px;
+}
+
+div.cherry{
+	background: url('cherry.png');
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover;
@@ -32,3 +57,9 @@ div.pacman{
 div.empty{
 
 }
+
+
+down: 40
+left: 37
+up: 38
+right: 39
